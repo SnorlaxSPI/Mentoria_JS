@@ -1,0 +1,14 @@
+{
+  "name": "hello_express",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "aflinsjr@icloud.com <aflinsjr@icloud.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.1",
+    "nodemon": "^2.0.18"
+  }
+}
