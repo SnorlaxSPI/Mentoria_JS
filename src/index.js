@@ -1,9 +1,11 @@
 const app = require('express')();
+const bodyParser = require('body-parser');
 
 //const app = express();
 
+app.use(bodyParser.json());
 
-const clients = [
+let clients = [
   { id: 3, nome: 'Alessandro 3', telefone: '14333333333' },
   { id: 1, nome: 'Alessandro 1', telefone: '14111111111' },
   { id: 2, nome: 'Alessandro 2', telefone: '14222222222' },
@@ -27,5 +29,40 @@ app.get('/clients/:id', (request, response) => {
   response.json(client);
 });
 
+/**
+ * Inserir dados no servidor - BD
+ */
+
+app.post('/clients', (request, response) => {
+  // request.body => quer o corpo da requisição
+  const client = request.body;
+  clients.push(client);
+  response.json(client);
+})
+
+/**
+ * Atualizar nome de clientes
+ */
+
+app.put('/clients/:id', (request, response) => {
+  const id = request.params.id;
+  const nome = request.body.nome;
+
+  let client = clients.filter(value => value.id == id);
+
+  client[0].nome = nome;
+
+  response.json(client[0]);
+});
+
+/**
+ * DELETE
+ */
+
+app.delete('/clients/:id', (request, response) => {
+  const id = request.params.id;
+  clients = clients.filter(value => value.id != id);
+  response.json(clients);
+})
 
 app.listen(3000);
