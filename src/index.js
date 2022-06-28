@@ -13,6 +13,18 @@ let clients = [
   
 ];
 
+// criação do primeiro middleware
+
+function log(request, response, next) {
+  const { url, method } = request;
+  console.log(`${method} - ${url} at ${new Date()}`)
+
+  // sem o next ele trava a aplicação no método, então precisa continuar
+  return next()
+}
+
+app.use(log);
+
 // Request: Tudo que o cliente está mandando vem por essa requisição (ele trás coisas do cliente)
 // Reponse: Tudo que o servidor responde vai por esse objeto, é a resposta do servidor
 
