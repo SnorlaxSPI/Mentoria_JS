@@ -28,7 +28,7 @@ function log(request, response, next) {
  * precisa comentar o app.use(logs) e colocar ele na rota
  */
 
-//app.use(log);
+app.use(log);
 
 // Request: Tudo que o cliente está mandando vem por essa requisição (ele trás coisas do cliente)
 // Reponse: Tudo que o servidor responde vai por esse objeto, é a resposta do servidor
@@ -42,19 +42,28 @@ app.get('/clients', (request, response) => response.json(clients));
  */
 
 app.get('/clients/:id', (request, response) => {
-  const client = clients.filter(value => value.id == request.params.id)
-  response.json(client);
+  const { id } = request.params;
+  const client = clients.find(value => value.id == id);
+
+  if(client == undefined) {
+    response.status(400).json({ error: "Requisição inválida" });
+  } else {
+    response.status(200).json(client);
+  }
+  //const client = clients.filter(value => value.id == request.params.id)
+  //response.json(client);
 });
 
 /**
  * Inserir dados no servidor - BD
  */
 
-app.post('/clients', log, (request, response) => {
+app.post('/clients', (request, response) => {
   // request.body => quer o corpo da requisição
   const client = request.body;
   clients.push(client);
-  response.json(client);
+
+  response.status(201).json(client);
 })
 
 /**
@@ -65,11 +74,14 @@ app.put('/clients/:id', (request, response) => {
   const id = request.params.id;
   const nome = request.body.nome;
 
-  let client = clients.filter(value => value.id == id);
-
-  client[0].nome = nome;
-
-  response.json(client[0]);
+  let client = clients.find(value => value.id == id);
+  
+  if(client == undefined) {
+    response.status(400).send();
+  } else {
+    client.nome = nome;
+    response.status(200).json(client);
+  }
 });
 
 /**
@@ -77,9 +89,15 @@ app.put('/clients/:id', (request, response) => {
  */
 
 app.delete('/clients/:id', (request, response) => {
-  const id = request.params.id;
-  clients = clients.filter(value => value.id != id);
-  response.json(clients);
+  const { id } = request.params;
+  const index = clients.findIndex(value => value.id == id);
+
+  if (index == -1) {
+    response.status(400).send();
+  } else {
+    clients.splice(index, 1);
+    response.status(204).send();
+  }
 })
 
 app.listen(3000);
