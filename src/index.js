@@ -13,7 +13,7 @@ let clients = [
   
 ];
 
-// criação do primeiro middleware
+// criação do primeiro middleware - log
 
 function log(request, response, next) {
   const { url, method } = request;
@@ -23,7 +23,12 @@ function log(request, response, next) {
   return next()
 }
 
-app.use(log);
+/**
+ * Para que o middleware seja processado em alguns metodos,
+ * precisa comentar o app.use(logs) e colocar ele na rota
+ */
+
+//app.use(log);
 
 // Request: Tudo que o cliente está mandando vem por essa requisição (ele trás coisas do cliente)
 // Reponse: Tudo que o servidor responde vai por esse objeto, é a resposta do servidor
@@ -45,7 +50,7 @@ app.get('/clients/:id', (request, response) => {
  * Inserir dados no servidor - BD
  */
 
-app.post('/clients', (request, response) => {
+app.post('/clients', log, (request, response) => {
   // request.body => quer o corpo da requisição
   const client = request.body;
   clients.push(client);
