@@ -1,9 +1,6 @@
-const app = require('express')();
-const bodyParser = require('body-parser');
+import Router from 'express';
 
-//const app = express();
-
-app.use(bodyParser.json());
+const router = Router();
 
 let clients = [
   { id: 3, nome: 'Alessandro 3', telefone: '14333333333' },
@@ -13,35 +10,13 @@ let clients = [
   
 ];
 
-// criação do primeiro middleware - log
-
-function log(request, response, next) {
-  const { url, method } = request;
-  console.log(`${method} - ${url} at ${new Date()}`)
-
-  // sem o next ele trava a aplicação no método, então precisa continuar
-  return next()
-}
-
-/**
- * Para que o middleware seja processado em alguns metodos,
- * precisa comentar o app.use(logs) e colocar ele na rota
- */
-
-app.use(log);
-
-// Request: Tudo que o cliente está mandando vem por essa requisição (ele trás coisas do cliente)
-// Reponse: Tudo que o servidor responde vai por esse objeto, é a resposta do servidor
-
-// Retorno de todos os clientes em uma linha só
-
-app.get('/clients', (request, response) => response.json(clients));
+router.get('/clients', (request, response) => response.json(clients));
 
 /**
  * Buscar um único recurso
  */
 
-app.get('/clients/:id', (request, response) => {
+router.get('/clients/:id', (request, response) => {
   const { id } = request.params;
   const client = clients.find(value => value.id == id);
 
@@ -50,15 +25,13 @@ app.get('/clients/:id', (request, response) => {
   } else {
     response.status(200).json(client);
   }
-  //const client = clients.filter(value => value.id == request.params.id)
-  //response.json(client);
 });
 
 /**
  * Inserir dados no servidor - BD
  */
 
-app.post('/clients', (request, response) => {
+router.post('/clients', (request, response) => {
   // request.body => quer o corpo da requisição
   const client = request.body;
   clients.push(client);
@@ -70,7 +43,7 @@ app.post('/clients', (request, response) => {
  * Atualizar nome de clientes
  */
 
-app.put('/clients/:id', (request, response) => {
+router.put('/clients/:id', (request, response) => {
   const id = request.params.id;
   const nome = request.body.nome;
 
@@ -88,7 +61,7 @@ app.put('/clients/:id', (request, response) => {
  * DELETE
  */
 
-app.delete('/clients/:id', (request, response) => {
+router.delete('/clients/:id', (request, response) => {
   const { id } = request.params;
   const index = clients.findIndex(value => value.id == id);
 
@@ -98,6 +71,7 @@ app.delete('/clients/:id', (request, response) => {
     clients.splice(index, 1);
     response.status(204).send();
   }
-})
+});
 
-app.listen(3000);
+export { router };
+
