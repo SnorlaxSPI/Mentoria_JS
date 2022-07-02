@@ -1,14 +1,17 @@
 import Router from 'express';
+import { v4 as uuidv4 } from 'uuid';
 
 const router = Router();
 
-let clients = [
-  { id: 3, nome: 'Alessandro 3', telefone: '14333333333' },
-  { id: 1, nome: 'Alessandro 1', telefone: '14111111111' },
-  { id: 2, nome: 'Alessandro 2', telefone: '14222222222' },
-  { id: 4, nome: 'Alessandro 4', telefone: '14444444444' },
-  
-];
+//let clients = [
+//  { id: 3, nome: 'Alessandro 3', telefone: '14333333333' },
+//  { id: 1, nome: 'Alessandro 1', telefone: '14111111111' },
+//  { id: 2, nome: 'Alessandro 2', telefone: '14222222222' },
+//  { id: 4, nome: 'Alessandro 4', telefone: '14444444444' },
+//  
+//];
+
+const clients = [];
 
 /**
  * Retorna todos clientes em json
@@ -45,9 +48,18 @@ router.get('/clients/:id', (request, response) => {
 
 router.post('/clients', (request, response) => {
   // request.body => quer o corpo da requisição
-  const client = request.body;
+  const { name, phone } = request.body;
 
+  //const id = uuid();
+
+  const client = {
+    id: uuidv4(),
+    name,
+    phone,
+  }
+  
   clients.push(client);
+  
 
   response.status(201).json(client);
 })
@@ -58,7 +70,7 @@ router.post('/clients', (request, response) => {
 
 router.put('/clients/:id', (request, response) => {
   const id = request.params.id;
-  const nome = request.body.nome;
+  const nome = request.body.name;
 
   let client = clients.find(value => value.id == id);
   
