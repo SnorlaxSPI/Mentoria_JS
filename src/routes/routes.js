@@ -10,7 +10,18 @@ let clients = [
   
 ];
 
-router.get('/clients', (request, response) => response.json(clients));
+/**
+ * Retorna todos clientes em json
+ */
+
+router.get('/clients', (request, response) => {
+  response.status(200).json(clients);
+});  
+
+/**
+ * Response: Resposta do servidor
+ * Request: Tudo o que o cliente responder vem por aqui
+ */
 
 /**
  * Buscar um único recurso
@@ -18,6 +29,7 @@ router.get('/clients', (request, response) => response.json(clients));
 
 router.get('/clients/:id', (request, response) => {
   const { id } = request.params;
+
   const client = clients.find(value => value.id == id);
 
   if(client == undefined) {
@@ -34,6 +46,7 @@ router.get('/clients/:id', (request, response) => {
 router.post('/clients', (request, response) => {
   // request.body => quer o corpo da requisição
   const client = request.body;
+
   clients.push(client);
 
   response.status(201).json(client);
@@ -53,6 +66,7 @@ router.put('/clients/:id', (request, response) => {
     response.status(400).send();
   } else {
     client.nome = nome;
+
     response.status(200).json(client);
   }
 });
@@ -63,7 +77,7 @@ router.put('/clients/:id', (request, response) => {
 
 router.delete('/clients/:id', (request, response) => {
   const { id } = request.params;
-  const index = clients.findIndex(value => value.id == id);
+  const index = clients.find(value => value.id == id);
 
   if (index == -1) {
     response.status(400).send();

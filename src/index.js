@@ -9,6 +9,7 @@ const app = express();
 
 // o app.use na verdade está injetando um middleware
 app.use(bodyParser.json());
+
 app.use(log);
 
 app.use(router);
