@@ -2,10 +2,5 @@
 
 CRIAÇÃO DO CRUD EM MEMÓRIA
 
-### Criação do métodos:
-
-#### POST
-#### GET
-#### PUT
-#### DELETE
+Projeto inicial para a criação de um README.MD e Issue
 
